@@ -352,6 +352,8 @@ void main(void)
   
   ppu_on_all();			// Turn PPU on
   fade_in();			// Fade in
+  
+  sfx_play(SFX_SELECT_YES, 0);
   /* GAME LOOP */
   while(1)
   {
@@ -363,13 +365,12 @@ void main(void)
       title_blink(50);
       if(pad_t & BTN_ST && key <= 6)
       {
-        sfx_play(1, 0);
         bf = true;
       }
       if(pad & BTN_ST && key <= 6)tl-=0;
       if(bf)
       {
-        title_blink(5);
+        title_blink(3);
         tl--;
         if(tl == 0) { tl = 500; tm++; };
         if(tm == 5) { level1(); state = GAME; };
