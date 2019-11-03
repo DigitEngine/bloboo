@@ -302,8 +302,7 @@ void change_color(const byte color)
   if(color == 0x04)pal_spr(PLPAL_4);
   if(color == 0x05)pal_spr(PLPAL_5);
 }
-
-extern const void sound_data[];
+extern char sound_data[];
 
 void main(void)
 {
@@ -328,7 +327,7 @@ void main(void)
   int arr_x = 80;
   int arr_y = 120;
   
-  sfx_init(&sound_data);
+  sfx_init(sound_data);
   
   // Turn PPU off
   ppu_off();
@@ -363,7 +362,7 @@ void main(void)
     if(state == TITLE)
     {
       title_blink(50);
-      if(pad_t & BTN_ST && key <= 6)
+      if(pad_t & BTN_ST)
       {
         bf = true;
       }
@@ -373,7 +372,11 @@ void main(void)
         title_blink(3);
         tl--;
         if(tl == 0) { tl = 500; tm++; };
-        if(tm == 5) { level1(); state = GAME; };
+        if(tm == 5)
+        {
+          if(key <= 6) { level1(); state = GAME; }
+          if(key >= 7) { lvlselect(); state = LVLSELECT; }
+        }
       }
       if(pad_t & DPD_L && key == 0)key++;
       if(pad & DPD_R && key == 1)key++;
@@ -382,15 +385,18 @@ void main(void)
       if(pad & BTN_A && key == 4)key++;
       if(pad & BTN_B && key == 5)key++;
       if(pad & BTN_A && key == 6)key++;
-      if(key == 7 && pad & BTN_ST) { lvlselect(); state = LVLSELECT; }
     }
     if(state == GAME && level == LEVEL_1)
     {
       p_clock++;
       if(p_clock >= 10)
       {
-        if(pad & DPD_L)sx--;
-        if(pad & DPD_R)sx++;
+        if(pad & DPD_L && sx == 0)plyr_x--;
+        else if(pad & DPD_L && plyr_x >= (16 * 8) - 12 && plyr_x < (256 + 128) - 12)sx--;
+        else if(pad & DPD_L && plyr_x >= (256 + 128) - 12)plyr_x--;
+        if(pad & DPD_R && plyr_x < (16 * 8) - 12)plyr_x++;
+        else if(pad & DPD_R && plyr_x >= (16 * 8) - 12 && sx < 32 * 8)sx++;
+        else if(pad & DPD_R && sx >= 32 * 8)plyr_x++;
         p_clock = 0;
       }
       if(pad_t & BTN_SL) { color++; change_color(color); }      
