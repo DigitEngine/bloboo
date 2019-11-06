@@ -17,9 +17,8 @@ Platform: NES
 #include "nametable_levelselect.h"	// Level select
 
 #include "levels.h"			// Level Nametables
-#include "collision.h"			// Collision
 
-#include "sprites.h"
+#include "sprites.h"			// Game Sprites
 
 
 // VRAM update buffer
@@ -204,8 +203,18 @@ const char PLPAL_5[] = { 0x0f,0x0a,0x1a,0x2a, 0x0 };
 static unsigned char wait = 160;
 static unsigned char frame_cnt = 0;
 
+char ntbuf1[30];
+char ntbuf2[30];
+
+char attrbuf[30/4];
+
 #pragma bss-name(push, "ZEROPAGE")
 #pragma data-name(push, "ZEROPAGE")
+
+word nt2attraddr(word a)
+{
+  return (a & 0x2c00 | 0x3c0 | ((a >> 4) & 38) & 0x38) | ((a >> 2) & 0x07);
+}
 
 void fade_in()
 {
@@ -291,8 +300,8 @@ void lvlselect()
   
   fade_in();
 }
-void draw_player(const byte x, const byte y, const byte id)
-{ oam_meta_spr(x, y, id, PLAYER); }
+void draw_player(const char* spr, const byte x, const byte y)
+{ oam_meta_spr(x, y, 0, spr); }
 void change_color(const byte color)
 {
   if(color == 0x00)pal_spr(PLPAL_0);
@@ -302,7 +311,7 @@ void change_color(const byte color)
   if(color == 0x04)pal_spr(PLPAL_4);
   if(color == 0x05)pal_spr(PLPAL_5);
 }
-extern char sound_data[];
+extern const void sound_data[];
 
 void main(void)
 {
@@ -327,7 +336,8 @@ void main(void)
   int arr_x = 80;
   int arr_y = 120;
   
-  sfx_init(sound_data);
+  sfx_init(&sound_data);
+  nmi_set_callback(famitone_update);
   
   // Turn PPU off
   ppu_off();
@@ -378,7 +388,7 @@ void main(void)
           if(key >= 7) { lvlselect(); state = LVLSELECT; }
         }
       }
-      if(pad_t & DPD_L && key == 0)key++;
+      if(pad & DPD_L && key == 0)key++;
       if(pad & DPD_R && key == 1)key++;
       if(pad & DPD_L && key == 2)key++;
       if(pad & BTN_SL && key == 3)key++;
@@ -391,18 +401,25 @@ void main(void)
       p_clock++;
       if(p_clock >= 10)
       {
-        if(pad & DPD_L && sx == 0)plyr_x--;
-        else if(pad & DPD_L && plyr_x >= (16 * 8) - 12 && plyr_x < (256 + 128) - 12)sx--;
-        else if(pad & DPD_L && plyr_x >= (256 + 128) - 12)plyr_x--;
-        if(pad & DPD_R && plyr_x < (16 * 8) - 12)plyr_x++;
-        else if(pad & DPD_R && plyr_x >= (16 * 8) - 12 && sx < 32 * 8)sx++;
-        else if(pad & DPD_R && sx >= 32 * 8)plyr_x++;
+        if(pad & DPD_L)
+        {
+          
+          if(plyr_x>=(16*8)-12||sx<=0)plyr_x--;
+          else sx--;
+        }
+        if(pad & DPD_R)
+        {
+          if(plyr_x<=(16*8)-12||sx>=(32*8))plyr_x++;
+          else sx++;
+        }
         p_clock = 0;
       }
+      if(plyr_x<=0)plyr_x=0;
+      if(plyr_x>=((32*8)-(3*8)))plyr_x=((32*8)-(3*8));
       if(pad_t & BTN_SL) { color++; change_color(color); }      
       if(pad & BTN_SL)color += 0;
       if(color > 5) { color = 0; change_color(color); }
-      draw_player(plyr_x,plyr_y,0);
+      draw_player(PLAYER_R,plyr_x,plyr_y);
       scroll(sx,0);
     }
     if(state == LVLSELECT)
