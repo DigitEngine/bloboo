@@ -37,6 +37,13 @@ Platform: NES
 #define SFX_SELECT     0
 #define SFX_SELECT_YES 1
 
+#define PLAYER_RIGHT 0x00
+#define PLAYER_LEFT  0x01
+
+#define PLAYER_NORMAL 0x00
+#define PLAYER_HURT   0x01
+#define PLAYER_UPSD   0x02
+
 /*
 - - -  L E V E L   D E F I N I T I O N S  - - -
 These "#define" directives contain hexadecimal
@@ -311,7 +318,7 @@ void change_color(const byte color)
   if(color == 0x04)pal_spr(PLPAL_4);
   if(color == 0x05)pal_spr(PLPAL_5);
 }
-extern const void sound_data[];
+extern char sound_data[];
 
 void main(void)
 {
@@ -330,6 +337,8 @@ void main(void)
   int plyr_y = 151;
   
   int sx = 0;
+  
+  byte plr = PLAYER_RIGHT;
   
   byte key = 0;
   
@@ -403,12 +412,13 @@ void main(void)
       {
         if(pad & DPD_L)
         {
-          
+          plr = PLAYER_LEFT;
           if(plyr_x>=(16*8)-12||sx<=0)plyr_x--;
           else sx--;
         }
         if(pad & DPD_R)
         {
+          plr = PLAYER_RIGHT;
           if(plyr_x<=(16*8)-12||sx>=(32*8))plyr_x++;
           else sx++;
         }
@@ -419,7 +429,9 @@ void main(void)
       if(pad_t & BTN_SL) { color++; change_color(color); }      
       if(pad & BTN_SL)color += 0;
       if(color > 5) { color = 0; change_color(color); }
-      draw_player(PLAYER_R,plyr_x,plyr_y);
+      
+      if(plr==PLAYER_RIGHT)draw_player(PLAYER_R,plyr_x,plyr_y);
+      if(plr==PLAYER_LEFT)draw_player(PLAYER_L,plyr_x,plyr_y);
       scroll(sx,0);
     }
     if(state == LVLSELECT)
