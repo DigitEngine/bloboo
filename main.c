@@ -332,9 +332,10 @@ void main(void)
   bool bf = false;
   
   byte p_clock = 0;
+  byte p_mult = 0;
   
   int plyr_x = 8;
-  int plyr_y = 151;
+  int plyr_y = 151-8;
   
   int sx = 0;
   
@@ -408,20 +409,28 @@ void main(void)
     if(state == GAME && level == LEVEL_1)
     {
       p_clock++;
-      if(p_clock >= 10)
+      if(p_clock >= 5)
       {
-        if(pad & DPD_L)
+        if(p_mult >= 2)
         {
-          plr = PLAYER_LEFT;
-          if(plyr_x>=(16*8)-12||sx<=0)plyr_x--;
-          else sx--;
+          if(pad & DPD_L)
+          {
+            plr = PLAYER_LEFT;
+            if(plyr_x>=(16*8)-12||sx<=0)plyr_x--;
+            else sx--;
+          }
+          if(pad & DPD_R)
+          {
+            plr = PLAYER_RIGHT;
+            if(plyr_x<=(16*8)-12||sx>=(32*8))plyr_x++;
+            else sx++;
+          }
+          p_mult = 0;
         }
-        if(pad & DPD_R)
-        {
-          plr = PLAYER_RIGHT;
-          if(plyr_x<=(16*8)-12||sx>=(32*8))plyr_x++;
-          else sx++;
-        }
+        plyr_y++;
+        if(plyr_y>=151)plyr_y = 151;
+        
+        p_mult++;
         p_clock = 0;
       }
       if(plyr_x<=0)plyr_x=0;
