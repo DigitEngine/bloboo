@@ -74,7 +74,7 @@ MSPR_3x3_SAME(_3x3_BLINK);
 /// Right-facing sprites
 
 // Player sprites
-MSPR_3x3(PLAYER_R, 0x70, 0);
+MSPR_3x3(PLYR_R, 0x70, 0);
 MSPR_3x3(PLYR_WALK_R, 0x80, 0);
 MSPR_3x3(PLYR_HURT_R, 0x90, 0);
 
@@ -85,9 +85,9 @@ MSPR_2x2(ENEMY1_2_R, 0xa4, 1);
 /// Left-facing sprites
 
 // Player sprites
-MSPR_3x3_FLIP(PLAYER_L, 0x70, 0);
-MSPR_3x3_FLIP(PLAYER_WALK_L, 0x80, 0);
-MSPR_3x3_FLIP(PLAYER_HURT_L, 0x90, 0);
+MSPR_3x3_FLIP(PLYR_L, 0x70, 0);
+MSPR_3x3_FLIP(PLYR_WALK_L, 0x80, 0);
+MSPR_3x3_FLIP(PLYR_HURT_L, 0x90, 0);
 
 // Enemy 1 sprites
 MSPR_2x2_FLIP(ENEMY_1_1_L, 0xa0, 1);

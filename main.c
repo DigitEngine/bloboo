@@ -16,9 +16,9 @@ Platform: NES
 #include "nametable_winscreen.h"	// Winner screen
 #include "nametable_levelselect.h"	// Level select
 
-#include "levels.h"			// Level Nametables
+#include "levels.h"			// Level nametables
 
-#include "sprites.h"			// Game Sprites
+#include "sprites.h"			// Game sprites
 
 
 // VRAM update buffer
@@ -128,7 +128,8 @@ PEOPLE: None
 #define LEVEL_A 0x09	// Level A (Volcanic Planet)
 #define LEVEL_B 0x0A	// Level B (Icy Planet)
 #define LEVEL_C 0x0B	// Level C (Huge Castle [FINAL])
-// Total Levels: 12
+#define LEVEL_D 0x0C	// Level D (Hidden Galaxy Level)
+// Total Levels: 13
 
 
 // B and A buttons
@@ -261,7 +262,7 @@ void title_blink(const byte wait_time)
   }
   else
   {
-    pal_col(7,(frame_cnt&32)?0x0f:0x30);
+    pal_col(7,(frame_cnt&32)?0x01:0x30);
     frame_cnt++;
     wait = wait_time;
   }
@@ -340,6 +341,7 @@ void main(void)
   int sx = 0;
   
   byte plr = PLAYER_RIGHT;
+  byte pls = PLAYER_NORMAL;
   
   byte key = 0;
   
@@ -439,8 +441,8 @@ void main(void)
       if(pad & BTN_SL)color += 0;
       if(color > 5) { color = 0; change_color(color); }
       
-      if(plr==PLAYER_RIGHT)draw_player(PLAYER_R,plyr_x,plyr_y);
-      if(plr==PLAYER_LEFT)draw_player(PLAYER_L,plyr_x,plyr_y);
+      if(plr==PLAYER_RIGHT)draw_player(PLYR_R,plyr_x,plyr_y);
+      if(plr==PLAYER_LEFT)draw_player(PLYR_L,plyr_x,plyr_y);
       scroll(sx,0);
     }
     if(state == LVLSELECT)
