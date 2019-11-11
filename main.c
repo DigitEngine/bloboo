@@ -36,6 +36,7 @@ Platform: NES
 
 #define SFX_SELECT     0
 #define SFX_SELECT_YES 1
+#define COMBO_ACCEPT   2
 
 #define PLAYER_RIGHT 0x00
 #define PLAYER_LEFT  0x01
@@ -157,7 +158,10 @@ PEOPLE: None
 /// Link audio stuff
 
 //#link "famitone2.s"
+void __fastcall__ famitone_update(void);
 //#link "sfx.s"
+//#link "music.s"
+
 
 const char PALETTE_0[] =
 {
@@ -262,7 +266,7 @@ void title_blink(const byte wait_time)
   }
   else
   {
-    pal_col(7,(frame_cnt&32)?0x01:0x30);
+    pal_col(7,(frame_cnt&32)?0x0f:0x30);
     frame_cnt++;
     wait = wait_time;
   }
@@ -319,6 +323,7 @@ void change_color(const byte color)
   if(color == 0x04)pal_spr(PLPAL_4);
   if(color == 0x05)pal_spr(PLPAL_5);
 }
+extern char bloboo_music_data[];
 extern char sound_data[];
 
 void main(void)
@@ -331,6 +336,7 @@ void main(void)
   byte tl = 500;
   byte tm = 0;
   bool bf = false;
+  bool sp = true;
   
   byte p_clock = 0;
   byte p_mult = 0;
@@ -348,7 +354,9 @@ void main(void)
   int arr_x = 80;
   int arr_y = 120;
   
-  sfx_init(&sound_data);
+  famitone_init(bloboo_music_data);
+  famitone_init(bloboo_music_data);
+  sfx_init(sound_data);
   nmi_set_callback(famitone_update);
   
   // Turn PPU off
@@ -374,7 +382,8 @@ void main(void)
   ppu_on_all();			// Turn PPU on
   fade_in();			// Fade in
   
-  sfx_play(SFX_SELECT_YES, 0);
+  music_play(0);
+  
   /* GAME LOOP */
   while(1)
   {
@@ -386,6 +395,8 @@ void main(void)
       title_blink(50);
       if(pad_t & BTN_ST)
       {
+        sfx_play(SFX_SELECT_YES,0);
+        music_stop();
         bf = true;
       }
       if(pad & BTN_ST && key <= 6)tl-=0;
@@ -407,6 +418,7 @@ void main(void)
       if(pad & BTN_A && key == 4)key++;
       if(pad & BTN_B && key == 5)key++;
       if(pad & BTN_A && key == 6)key++;
+      if(key == 7 && sp) { sfx_play(COMBO_ACCEPT, 0); sp=false; }
     }
     if(state == GAME && level == LEVEL_1)
     {
@@ -431,7 +443,6 @@ void main(void)
         }
         plyr_y++;
         if(plyr_y>=151)plyr_y = 151;
-        
         p_mult++;
         p_clock = 0;
       }
@@ -450,7 +461,7 @@ void main(void)
       if(pad_t & DPD_D && arr_y < 216) { arr_y+=8; sfx_play(SFX_SELECT, 0); }
       if(pad_t & DPD_D && arr_y >= 216)arr_y = 120;
       if(pad & DPD_D)arr_y+=0;
-      if(pad_t & DPD_U && arr_y > 120)arr_y-=8;
+      if(pad_t & DPD_U && arr_y > 120) { arr_y-=8; sfx_play(SFX_SELECT, 0); }
       if(pad_t & DPD_U && arr_y <= 120)arr_y = 208;
       if(pad & DPD_U)arr_y+=0;
       oam_spr(arr_x, arr_y, 0x3f, 0, 0);
