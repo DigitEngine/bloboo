@@ -323,8 +323,8 @@ void change_color(const byte color)
   if(color == 0x04)pal_spr(PLPAL_4);
   if(color == 0x05)pal_spr(PLPAL_5);
 }
-extern char bloboo_music_data[];
-extern char sound_data[];
+extern const void bloboo_music_data[];
+extern const void sound_data[];
 
 void main(void)
 {
@@ -461,8 +461,8 @@ void main(void)
       if(pad_t & DPD_D && arr_y < 216) { arr_y+=8; sfx_play(SFX_SELECT, 0); }
       if(pad_t & DPD_D && arr_y >= 216)arr_y = 120;
       if(pad & DPD_D)arr_y+=0;
-      if(pad_t & DPD_U && arr_y > 120) { arr_y-=8; sfx_play(SFX_SELECT, 0); }
-      if(pad_t & DPD_U && arr_y <= 120)arr_y = 208;
+      if(pad_t & DPD_U && arr_y > 112) { arr_y-=8; sfx_play(SFX_SELECT, 0); }
+      if(pad_t & DPD_U && arr_y <= 112)arr_y = 208;
       if(pad & DPD_U)arr_y+=0;
       oam_spr(arr_x, arr_y, 0x3f, 0, 0);
     }
