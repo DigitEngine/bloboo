@@ -379,6 +379,8 @@ void main(void)
   // Write to attribute table
   vram_write(ATTR_TITLE, ATTR_SIZE);
   
+  vram_adr(NTADR_A(2, 2));
+  
   ppu_on_all();			// Turn PPU on
   fade_in();			// Fade in
   
