@@ -17,8 +17,8 @@ Platform: NES
 #include "nametable_levelselect.h"	// Level select
 
 #include "levels.h"			// Level nametables
-
 #include "sprites.h"			// Game sprites
+#include "platformer.h"			// Platformer Engine
 
 
 // VRAM update buffer
@@ -323,8 +323,8 @@ void change_color(const byte color)
   if(color == 0x04)pal_spr(PLPAL_4);
   if(color == 0x05)pal_spr(PLPAL_5);
 }
-extern const void bloboo_music_data[];
-extern const void sound_data[];
+extern char bloboo_music_data[];
+extern char sound_data[];
 
 void main(void)
 {
@@ -378,8 +378,6 @@ void main(void)
   
   // Write to attribute table
   vram_write(ATTR_TITLE, ATTR_SIZE);
-  
-  vram_adr(NTADR_A(2, 2));
   
   ppu_on_all();			// Turn PPU on
   fade_in();			// Fade in
