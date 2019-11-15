@@ -116,7 +116,7 @@ const unsigned char is_solid[] =
 #define MAX_ROOMS 1
 #define MAX_SCROLL (MAX_ROOMS*0x100)-1
 
-const unsigned char* Rooms[] = {0};
+const unsigned char* Rooms[] = {Col1, Col2};
 
 // PROTOTYPES
 void load_room(void);

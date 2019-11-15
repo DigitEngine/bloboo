@@ -16,14 +16,14 @@ Platform: NES
 #include "nametable_winscreen.h"	// Winner screen
 #include "nametable_levelselect.h"	// Level select
 
-#include "levels.h"			// Level nametables
-#include "sprites.h"			// Game sprites
-#include "platformer.h"			// Platformer Engine
-//#link "platformer.c"
-
-#include "nesdoug.h"
+#include "nesdoug.h"			// NESDoug's library
 //#link "nesdoug.s"
 
+#include "levels.h"			// Level nametables
+#include "sprites.h"			// Game sprites
+#include "collisions.c"			// Collisions
+#include "platformer.h"			// Platformer Engine
+//#link "platformer.c"
 
 #define NES_MIRRORING 1
 
