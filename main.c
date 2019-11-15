@@ -19,12 +19,11 @@ Platform: NES
 #include "levels.h"			// Level nametables
 #include "sprites.h"			// Game sprites
 #include "platformer.h"			// Platformer Engine
+//#link "platformer.c"
 
+#include "nesdoug.h"
+//#link "nesdoug.s"
 
-// VRAM update buffer
-
-#include "vrambuf.h"
-//#link "vrambuf.c"
 
 #define NES_MIRRORING 1
 
@@ -354,7 +353,6 @@ void main(void)
   int arr_x = 80;
   int arr_y = 120;
   
-  famitone_init(bloboo_music_data);
   famitone_init(bloboo_music_data);
   sfx_init(sound_data);
   nmi_set_callback(famitone_update);
