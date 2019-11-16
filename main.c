@@ -10,6 +10,8 @@ Platform: NES
 */
 #include "neslib.h"			// Main library
 
+#include <string.h>			// Stuff with memory
+
 // SCREEN NAMETABLES
 #include "nametable_title.h"		// Title screen
 #include "nametable_gameover.h"		// Game over screen
@@ -22,8 +24,6 @@ Platform: NES
 #include "levels.h"			// Level nametables
 #include "sprites.h"			// Game sprites
 #include "collisions.c"			// Collisions
-#include "platformer.h"			// Platformer Engine
-//#link "platformer.c"
 
 #define NES_MIRRORING 1
 
@@ -145,6 +145,9 @@ PEOPLE: None
 // Start/Select buttons
 #define BTN_ST PAD_START
 #define BTN_SL PAD_SELECT
+
+#include "platformer.h"			// Platformer Engine
+#include "platformer.c"			// Function defs.
 
 // Screen attribute table size
 #define ATTR_SIZE 0x40
@@ -356,7 +359,6 @@ void main(void)
   famitone_init(bloboo_music_data);
   sfx_init(sound_data);
   nmi_set_callback(famitone_update);
-  
   // Turn PPU off
   ppu_off();
   
