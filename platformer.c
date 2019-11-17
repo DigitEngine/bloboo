@@ -111,6 +111,136 @@ void movement(void)
   
   if(collision_U)
   {
-    high_byte
+    high_byte(Bloboo.y) = high_byte(Bloboo.y) - eject_U;
+    Bloboo.vel_y = 0;
   }
+  else if(collision_D)
+  {
+    high_byte(Bloboo.y) = high_byte(Bloboo.y) - eject_D;
+    Bloboo.vel_y = 0;
+  }
+  
+  Generic.y = high_byte(Bloboo.y);
+  bg_check_low();
+  if(collision_D)
+  {
+    if(pad_t & BTN_A)Bloboo.vel_y = JUMP_VEL;
+    // Remember to play jump sound effect
+  }
+  
+  if((scroll_x & 0xff) < 4)
+  {
+    new_cmap();
+  }
+  
+  temp5 = Bloboo.x;
+  if(Bloboo.x > MAX_RIGHT)
+  {
+    temp1 = (Bloboo.x - MAX_RIGHT) >> 8;
+    scroll_x += temp1;
+    high_byte(Bloboo.x) = high_byte(Bloboo.x) - temp1;
+  }
+  if(scroll_x > MAX_SCROLL)
+  {
+    scroll_x = MAX_SCROLL;
+    Bloboo.x = temp5;
+    if(high_byte(Bloboo.x) >= 0xf1)
+    {
+      Bloboo.x = 0xf100;
+    }
+  }
+}
+
+//void enemy_moves(void);
+
+void bg_collision(void)
+{
+  collision_L = 0;
+  collision_R = 0;
+  collision_U = 0;
+  collision_D = 0;
+  
+  if(Generic.y = 0xf0)return;
+  
+  temp6 = temp5 = Generic.x + scroll_x;
+  temp1 = temp5 & 0xff;
+  temp2 = temp5 >> 8;
+  
+  eject_L = temp1 | 0xf0;
+  
+  temp3 = Generic.y;
+  
+  eject_U = temp3 | 0xf0;
+  
+  if(L_R_switch) temp3 += 2;
+  
+  bg_collision_sub();
+  
+  if(collision & COL_ALL)
+  {
+    collision_L++;
+    collision_U++;
+  }
+  
+  temp5 += Generic.width;
+  temp1 = temp5 & 0xff;
+  temp2 = temp5 >> 8;
+  
+  eject_R = (temp1 + 1) & 0xff;
+  
+  bg_collision_sub();
+  
+  if(collision & COL_ALL)
+  {
+    collision_R++;
+    collision_U++;
+  }
+  
+  temp3 = Generic.y + Generic.height;
+  if(L_R_switch)temp3 -= 2;
+  eject_D = (temp3 + 1) & 0xff;
+  if(temp3 >= 0xf0)return;
+  
+  bg_collision_sub();
+  
+  if(collision & COL_ALL)
+  {
+    collision_R++;
+  }
+  if(collision & (COL_DOWN|COL_ALL))
+  {
+    collision_D++;
+  }
+  
+  temp1 = temp6 & 0xff;
+  temp2 = temp6 >> 8;
+  
+  bg_collision_sub();
+  
+  if(collision & COL_ALL)
+  {
+    collision_L++;
+  }
+  if(collision & (COL_DOWN|COL_ALL))
+  {
+    collision_D++;
+  }
+  
+  if((temp3 & 0x0f) > 3)collision_D = 0;
+}
+
+void bg_collision_sub(void)
+{
+  coordinates = (temp1 >> 4) + (temp3 * 0xf0);
+  
+  map = temp2&1;
+  if(!map)
+  {
+    collision = c_map[coordinates];
+  }
+  else
+  {
+    collision = c_map2[coordinates];
+  }
+  collision = is_solid[collision];
 }
