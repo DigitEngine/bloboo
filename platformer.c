@@ -245,15 +245,19 @@ void bg_collision_sub(void)
   collision = is_solid[collision];
 }
 
-void draw_screen_R(void)
+//void draw_screen_R(void);
+
+void new_cmap(void)
 {
-  pseudo_scroll_x = scroll_x + 0x120;
+  room = ((scroll_x >> 8) - 1);
   
-  temp1 = pseudo_scroll_x >> 8;
-  
-  set_data_pointer(Rooms[temp1]);
-  nt = temp1&1;
-  x = pseudo_scroll_x & 0xff;
-  
-  switch(scroll_
+  map = room & 1;
+  if(!map)
+  {
+    memcpy(c_map, Rooms[room], 240);
+  }
+  else
+  {
+    memcpy(c_map2, Rooms[room], 240);
+  }
 }

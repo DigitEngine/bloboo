@@ -123,7 +123,7 @@ void load_room(void);
 void draw_sprites(void);
 void movement(void);
 void bg_collision(void);
-void draw_screen_R(void);
+//void draw_screen_R(void);
 void new_cmap(void);
 void bg_collision_sub(void);
 void bg_check_low(void);
