@@ -6,7 +6,6 @@ void load_room(void)
 {
   set_data_pointer(Rooms[0]);
   memcpy(c_map, Rooms[0], 240);
-  sprite_obj_init();
 }
 
 void draw_sprites(void)
@@ -261,3 +260,50 @@ void new_cmap(void)
     memcpy(c_map2, Rooms[room], 240);
   }
 }
+
+void bg_check_low(void)
+{
+  collision_D = 0;
+  
+  temp5 = Generic.x + scroll_x;
+  temp1 = temp5 & 0xff;
+  temp2 = temp5 >> 8;
+  
+  temp3 = Generic.y + Generic.height + 1;
+  
+  if(temp3 >= 0xf0)return;
+  
+  bg_collision_sub();
+  
+  if(collision & (COL_DOWN|COL_ALL))
+  {
+    collision_D++;
+  }
+  
+  temp5 += Generic.width;
+  temp1 = temp5 & 0xff;
+  temp2 = temp5 >> 8;
+  
+  bg_collision_sub();
+  
+  if(collision & (COL_DOWN|COL_ALL))
+  {
+    collision_D++;
+  }
+  
+  if((temp3 & 0xff) > 3)collision_D = 0;
+}
+
+//void sprite_collisions(void);
+
+//void check_spr_object(void);
+
+char get_position(void)
+{
+  temp5 -= scroll_x;
+  temp_x = temp5 & 0xff;
+  if(high_byte(temp5))return 0;
+  return 1;
+}
+
+//void spr_obj_init(void);

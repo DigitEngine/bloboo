@@ -379,6 +379,11 @@ void main(void)
   // Write to attribute table
   vram_write(ATTR_TITLE, ATTR_SIZE);
   
+  set_vram_buffer();
+  clear_vram_buffer();
+  
+  load_room();
+  
   ppu_on_all();			// Turn PPU on
   fade_in();			// Fade in
   
@@ -422,7 +427,7 @@ void main(void)
     }
     if(state == GAME && level == LEVEL_1)
     {
-      p_clock++;
+      /* p_clock++;
       if(p_clock >= 5)
       {
         if(p_mult >= 2)
@@ -455,6 +460,23 @@ void main(void)
       if(plr==PLAYER_RIGHT)draw_player(PLYR_R,plyr_x,plyr_y);
       if(plr==PLAYER_LEFT)draw_player(PLYR_L,plyr_x,plyr_y);
       scroll(sx,0);
+      */
+      ppu_wait_nmi();
+      
+      pad_t = pad_trigger(0);
+      pad = pad_state(0);
+      
+      clear_vram_buffer();
+      
+      movement();
+      //check_spr_objects();
+      //sprite_collisions();
+      //enemy_moves();
+      
+      set_scroll_x(scroll_x);
+      set_scroll_y(scroll_y);
+      //draw_screen_R();
+      draw_sprites();
     }
     if(state == LVLSELECT)
     {

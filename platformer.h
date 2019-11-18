@@ -84,7 +84,7 @@ struct Hero
   signed int vel_y;
 };
 
-struct Hero Bloboo = { 0x9ff, 0xa000 };
+struct Hero Bloboo = { 0x9ff, 0x9000 };
 
 
 #define HERO_WIDTH 11
@@ -116,7 +116,7 @@ const unsigned char is_solid[] =
 #define MAX_ROOMS 1
 #define MAX_SCROLL (MAX_ROOMS*0x100)-1
 
-const unsigned char* Rooms[] = {Col1, Col2};
+const unsigned char* const Rooms[] = {Col1, Col2};
 
 // PROTOTYPES
 void load_room(void);
@@ -127,8 +127,8 @@ void bg_collision(void);
 void new_cmap(void);
 void bg_collision_sub(void);
 void bg_check_low(void);
-void get_position(void);
+char get_position(void);
 //void enemy_moves(void);
 void sprite_collisions(void);
 void check_spr_objects(void);
-void sprite_obj_init(void);
+//void sprite_obj_init(void);
