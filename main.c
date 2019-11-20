@@ -146,6 +146,8 @@ PEOPLE: None
 #define BTN_ST PAD_START
 #define BTN_SL PAD_SELECT
 
+byte pad;
+byte pad_t;
 #include "platformer.h"			// Platformer Engine
 #include "platformer.c"			// Function defs.
 
@@ -392,9 +394,8 @@ void main(void)
   /* GAME LOOP */
   while(1)
   {
-    byte pad = pad_state(0);
-    byte pad_t = pad_trigger(0);
-    byte oam_id = 0;
+    pad = pad_state(0);
+    pad_t = pad_trigger(0);
     if(state == TITLE)
     {
       title_blink(50);
@@ -427,40 +428,6 @@ void main(void)
     }
     if(state == GAME && level == LEVEL_1)
     {
-      /* p_clock++;
-      if(p_clock >= 5)
-      {
-        if(p_mult >= 2)
-        {
-          if(pad & DPD_L)
-          {
-            plr = PLAYER_LEFT;
-            if(plyr_x>=(16*8)-12||sx<=0)plyr_x--;
-            else sx--;
-          }
-          if(pad & DPD_R)
-          {
-            plr = PLAYER_RIGHT;
-            if(plyr_x<=(16*8)-12||sx>=(32*8))plyr_x++;
-            else sx++;
-          }
-          p_mult = 0;
-        }
-        plyr_y++;
-        if(plyr_y>=151)plyr_y = 151;
-        p_mult++;
-        p_clock = 0;
-      }
-      if(plyr_x<=0)plyr_x=0;
-      if(plyr_x>=((32*8)-(3*8)))plyr_x=((32*8)-(3*8));
-      if(pad_t & BTN_SL) { color++; change_color(color); }      
-      if(pad & BTN_SL)color += 0;
-      if(color > 5) { color = 0; change_color(color); }
-      
-      if(plr==PLAYER_RIGHT)draw_player(PLYR_R,plyr_x,plyr_y);
-      if(plr==PLAYER_LEFT)draw_player(PLYR_L,plyr_x,plyr_y);
-      scroll(sx,0);
-      */
       ppu_wait_nmi();
       
       pad_t = pad_trigger(0);

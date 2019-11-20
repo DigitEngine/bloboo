@@ -2,7 +2,7 @@
 
 #define ACCEL 0x30
 #define GRAVITY 0x50
-#define MAX_SPEED 0x240
+#define MAX_SPEED 0x200
 #define JUMP_VEL -0x600
 #define MAX_RIGHT 0x8000
 
@@ -14,8 +14,6 @@
 #define LEFT 0
 #define RIGHT 1
 unsigned char sprid;
-unsigned char pad_t;
-unsigned char pad;
 unsigned char collision;
 unsigned char collision_L;
 unsigned char collision_R;
@@ -32,7 +30,7 @@ unsigned char eject_L;
 unsigned char eject_R;
 unsigned char eject_U;
 unsigned char eject_D;
-unsigned char direction = RIGHT;
+unsigned char direction;
 
 
 int address;
@@ -88,8 +86,8 @@ struct Hero
 struct Hero Bloboo = { 0x9ff, 0x9000 };
 
 
-#define HERO_WIDTH 11
-#define HERO_HEIGHT 12
+#define HERO_WIDTH 24
+#define HERO_HEIGHT 24
 
 #define TURN_OFF 0xff
 
