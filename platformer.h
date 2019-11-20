@@ -11,6 +11,8 @@
 #pragma bss-name(push, "ZEROPAGE")
 
 // GLOBAL VARIABLES
+#define LEFT 0
+#define RIGHT 1
 unsigned char sprid;
 unsigned char pad_t;
 unsigned char pad;
@@ -30,9 +32,8 @@ unsigned char eject_L;
 unsigned char eject_R;
 unsigned char eject_U;
 unsigned char eject_D;
-unsigned char direction;
-#define LEFT 0
-#define RIGHT 1
+unsigned char direction = RIGHT;
+
 
 int address;
 unsigned char x;
