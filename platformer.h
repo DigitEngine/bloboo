@@ -1,10 +1,10 @@
 /* PLATFORMER ENGINE */
 
-#define ACCEL 0x30
-#define GRAVITY 0x50
-#define MAX_SPEED 0x200
+#define ACCEL 0x20
+#define GRAVITY 0x4b
+#define MAX_SPEED 0x1a0
 #define JUMP_VEL -0x600
-#define MAX_RIGHT 0x8000
+#define MAX_RIGHT 0x7b00
 
 
 
