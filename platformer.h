@@ -86,7 +86,7 @@ struct Hero
 struct Hero Bloboo = { 0x9ff, 0x9000 };
 
 
-#define HERO_WIDTH 24
+#define HERO_WIDTH 20
 #define HERO_HEIGHT 24
 
 #define TURN_OFF 0xff
