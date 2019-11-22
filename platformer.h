@@ -32,6 +32,8 @@ unsigned char eject_U;
 unsigned char eject_D;
 unsigned char direction;
 
+byte pad;
+byte pad_t;
 
 int address;
 unsigned char x;

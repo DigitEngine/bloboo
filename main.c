@@ -146,8 +146,6 @@ PEOPLE: None
 #define BTN_ST PAD_START
 #define BTN_SL PAD_SELECT
 
-byte pad;
-byte pad_t;
 #include "platformer.h"			// Platformer Engine
 #include "platformer.c"			// Function defs.
 
@@ -204,7 +202,7 @@ const char PALETTE_LVLSEL[] =
   0x09,0x19,0x29, 0x0,
   0x00,0x00,0x11, 0x0,
   
-  0x00,0x00,0x20, 0x0,
+  0x00,0x00,0x30, 0x0,
   0x00,0x00,0x00, 0x0,
   0x00,0x00,0x00, 0x0,
   0x00,0x00,0x00, 0x0
@@ -219,18 +217,8 @@ const char PLPAL_5[] = { 0x0f,0x0a,0x1a,0x2a, 0x0 };
 static unsigned char wait = 160;
 static unsigned char frame_cnt = 0;
 
-char ntbuf1[30];
-char ntbuf2[30];
-
-char attrbuf[30/4];
-
 #pragma bss-name(push, "ZEROPAGE")
 #pragma data-name(push, "ZEROPAGE")
-
-word nt2attraddr(word a)
-{
-  return (a & 0x2c00 | 0x3c0 | ((a >> 4) & 38) & 0x38) | ((a >> 2) & 0x07);
-}
 
 void fade_in()
 {
@@ -394,8 +382,8 @@ void main(void)
   /* GAME LOOP */
   while(1)
   {
-    pad = pad_state(0);
     pad_t = pad_trigger(0);
+    pad = pad_state(0);
     if(state == TITLE)
     {
       title_blink(50);
@@ -408,7 +396,7 @@ void main(void)
       if(pad & BTN_ST && key <= 6)tl-=0;
       if(bf)
       {
-        title_blink(3);
+        title_blink(5);
         tl--;
         if(tl == 0) { tl = 500; tm++; };
         if(tm == 5)
