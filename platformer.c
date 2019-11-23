@@ -254,7 +254,10 @@ void bg_collision_sub(void)
   collision = is_solid[collision];
 }
 
-//void draw_screen_R(void);
+void draw_screen_R(void)
+{
+  
+}
 
 void new_cmap(void)
 {

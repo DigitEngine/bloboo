@@ -95,6 +95,17 @@ struct Hero Bloboo = { 0x9ff, 0x9000 };
 
 // Coins & Enemies
 
+const unsigned char metatiles_lvl1[] =
+{
+  0, 0, 0, 0, 0,
+  81, 81, 97, 97, 0,
+  82, 82, 98, 98, 0,
+  83, 83, 99, 99, 0,
+  84, 84, 100, 100, 0,
+  50, 51, 66, 67, 0,
+  48, 49, 64, 65, 0,
+};
+
 #define COL_DOWN 0x80
 #define COL_ALL 0x40
 
