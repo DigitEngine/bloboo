@@ -24,6 +24,8 @@ Platform: NES
 #include "levels.h"			// Level nametables
 #include "sprites.h"			// Game sprites
 #include "collisions.c"			// Collisions
+#include "rooms.c"			// Rooms (Graphical)
+
 
 #define NES_MIRRORING 1
 
@@ -443,7 +445,7 @@ void main(void)
       if(pad_t & DPD_U && arr_y > 112) { arr_y-=8; sfx_play(SFX_SELECT, 0); }
       if(pad_t & DPD_U && arr_y <= 112)arr_y = 208;
       if(pad & DPD_U)arr_y+=0;
-      oam_spr(arr_x, arr_y, 0x3f, 0, 0);
+      oam_spr(arr_x, arr_y, 0x2c, 0, 0);
     }
   }
 }
