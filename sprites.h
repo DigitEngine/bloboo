@@ -27,11 +27,33 @@ const unsigned char name[]=\
 16,16,(hex)+5,attr|OAM_FLIP_H,\
 128};
 
-#define BLBOO_WALKING_R(name,hex,attr)\
+#define BLBOO_HURT_R(name,hex,attr)\
+const unsigned char name[]=\
 {\
-0,  0,(hex)+0,attr\
-8,  0,(hex)+1,attr\
-16, 0,(hex)+2,attr|OAM_FLIP_H,\
+0,  0,(hex)+0 ,attr,\
+8,  0,(hex)+1 ,attr,\
+16, 0,(hex)+0 ,attr|OAM_FLIP_H,\
+0,  8,(hex)+16,attr,\
+8,  8,(hex)+17,attr,\
+16, 8,(hex)+18,attr,\
+0, 16,(hex)+19,attr,\
+8, 16,(hex)+20,attr,\
+16,16,(hex)+21,attr,\
+128};
+
+#define BLBOO_HURT_L(name,hex,attr)\
+const unsigned char name[]=\
+{\
+0,  0,(hex)+0 ,attr,\
+8,  0,(hex)+1 ,attr|OAM_FLIP_H,\
+16, 0,(hex)+0 ,attr|OAM_FLIP_H,\
+0,  8,(hex)+18,attr|OAM_FLIP_H,\
+8,  8,(hex)+17,attr|OAM_FLIP_H,\
+16, 8,(hex)+16,attr|OAM_FLIP_H,\
+0, 16,(hex)+21,attr|OAM_FLIP_H,\
+8, 16,(hex)+20,attr|OAM_FLIP_H,\
+16,16,(hex)+19,attr|OAM_FLIP_H,\
+128};
 
 
 #define MSPR_3x3_BLANK(name)\
@@ -68,6 +90,7 @@ MSPR_3x3_BLANK(_3x3_BLINK);
 
 // Player sprites
 BLBOO_R(PLYR_R, 0x00, 0);
+BLBOO_R(PLYR_WALK_R, 0x08, 0);
 
 
 /// Left-facing sprites
