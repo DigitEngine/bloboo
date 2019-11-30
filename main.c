@@ -360,6 +360,8 @@ void main(void)
   pal_bg(PALETTE_0);		// Background Palette Def
   pal_spr(PLPAL_0);
   
+  bank_spr(1);			// Set sprite table to table 2
+  
   // Draw title screen
   vram_adr(NAMETABLE_A);	// Set address to Nam. A
   vram_unrle(NAMT_TITLE);	// Unpack namtable into VRAM
