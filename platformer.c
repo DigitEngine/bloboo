@@ -5,7 +5,35 @@
 void load_room(void)
 {
   set_data_pointer(Rooms[0]);
-  memcpy(c_map, Rooms[0], 240);
+  set_mt_pointer(metatiles_lvl1);
+  for(y = 0; ; y += 0x20)
+  {
+    for(x = 0; ; x += 0x20)
+    {
+      clear_vram_buffer();
+      address = get_ppu_addr(0, x, y);
+      index = (y & 0xf0) + (x >> 4);
+      buffer_4_mt(address, index);
+      flush_vram_update(VRAMBUF);
+      if(x == 0xe0)break;
+    }
+    if(y == 0xe0)break;
+  }
+  
+  set_data_pointer(Rooms[1]);
+  for(y = 0; ; y += 0x20)
+  {
+    x = 0;
+    clear_vram_buffer();
+    address = get_ppu_addr(1, x, y);
+    index = (y & 0xf0);
+    buffer_4_mt(address, index);
+    flush_vram_update(VRAMBUF);
+    if(y == 0xe0)break;
+  }
+  clear_vram_buffer();
+  
+  memcpy(c_map, Cols[0], 240);
 }
 
 void draw_sprites(void)
@@ -256,7 +284,59 @@ void bg_collision_sub(void)
 
 void draw_screen_R(void)
 {
+  pseudo_scroll_x = scroll_x + 0x120;
   
+  temp1 = pseudo_scroll_x >> 8;
+  
+  set_data_pointer(Rooms[temp1]);
+  nt = temp1 & 1;
+  x = pseudo_scroll_x & 0xff;
+  
+  switch(scroll_count)
+  {
+    case 0:
+      address = get_ppu_addr(nt, x, 0);
+      index = 0 + (x >> 4);
+      buffer_4_mt(address, index);
+      
+      address = get_ppu_addr(nt, x, 0x20);
+      index = 0x20 + (x >> 4);
+      buffer_4_mt(address, index);
+      break;
+      
+    case 1:
+      address = get_ppu_addr(nt, x, 0x40);
+      index = 0x40 + (x >> 4);
+      buffer_4_mt(address, index);
+      
+      address = get_ppu_addr(nt, x, 0x60);
+      index = 0x60 + (x >> 4);
+      buffer_4_mt(address, index);
+      break;
+      
+    case 2:
+      address = get_ppu_addr(nt, x, 0x80);
+      index = 0x80 + (x >> 4);
+      buffer_4_mt(address, index);
+      
+      address = get_ppu_addr(nt, x, 0xa0);
+      index = 0xa0 + (x >> 4);
+      buffer_4_mt(address, index);
+      break;
+    
+    default:
+      address = get_ppu_addr(nt, x, 0xc0);
+      index = 0xc0 + (x >> 4);
+      buffer_4_mt(address, index);
+      
+      address = get_ppu_addr(nt, x, 0xe0);
+      index = 0xe0 + (x >> 4);
+      buffer_4_mt(address, index);
+      break;
+  }
+  
+  scroll_count++;
+  scroll_count &= 3;
 }
 
 void new_cmap(void)
@@ -266,11 +346,11 @@ void new_cmap(void)
   map = room & 1;
   if(!map)
   {
-    memcpy(c_map, Rooms[room], 240);
+    memcpy(c_map, Cols[room], 240);
   }
   else
   {
-    memcpy(c_map2, Rooms[room], 240);
+    memcpy(c_map2, Cols[room], 240);
   }
 }
 

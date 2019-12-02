@@ -132,17 +132,18 @@ const unsigned char is_solid[] =
   0
 };
 
-#define MAX_ROOMS 1
+#define MAX_ROOMS (3-1)
 #define MAX_SCROLL (MAX_ROOMS*0x100)-1
 
-const unsigned char* const Rooms[] = {Col1, Col2};
+const unsigned char* const Cols[] = {Col1, Col2, Col3};
+const unsigned char* const Rooms[] = {Room1_1, Room1_2, Room1_3};
 
 // PROTOTYPES
 void load_room(void);
 void draw_sprites(void);
 void movement(void);
 void bg_collision(void);
-//void draw_screen_R(void);
+void draw_screen_R(void);
 void new_cmap(void);
 void bg_collision_sub(void);
 void bg_check_low(void);

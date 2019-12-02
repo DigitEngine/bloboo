@@ -268,24 +268,16 @@ void title_blink(const byte wait_time)
 void level1()
 {
   fade_out();
+  
   ppu_off();
   
-  pal_all(PALETTE_1);
+  pal_bg(PALETTE_1);
   
-  vram_adr(NAMETABLE_A);
-  vram_unrle(LVL_1_1);
-  
-  vram_adr(0x23c0);
-  vram_write(ATTR_1_1, ATTR_SIZE);
-  
-  vram_adr(NAMETABLE_B);
-  vram_unrle(LVL_1_2);
-  
-  vram_adr(0x27c0);
-  vram_write(ATTR_1_2, ATTR_SIZE);
+  set_vram_buffer();
+  clear_vram_buffer();
+  load_room();
   
   ppu_on_all();
-  
   fade_in();
 }
 void lvlselect()
@@ -376,8 +368,6 @@ void main(void)
   set_vram_buffer();
   clear_vram_buffer();
   
-  load_room();
-  
   ppu_on_all();			// Turn PPU on
   fade_in();			// Fade in
   
@@ -434,7 +424,7 @@ void main(void)
       
       set_scroll_x(scroll_x);
       set_scroll_y(scroll_y);
-      //draw_screen_R();
+      draw_screen_R();
       draw_sprites();
     }
     if(state == LVLSELECT)
