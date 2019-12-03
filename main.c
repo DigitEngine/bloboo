@@ -21,7 +21,6 @@ Platform: NES
 #include "nesdoug.h"			// NESDoug's library
 //#link "nesdoug.s"
 
-#include "levels.h"			// Level nametables
 #include "sprites.h"			// Game sprites
 #include "collisions.c"			// Collisions
 #include "rooms.c"			// Rooms (Graphical)
@@ -424,6 +423,7 @@ void main(void)
       
       set_scroll_x(scroll_x);
       set_scroll_y(scroll_y);
+      plyr_walk();
       draw_screen_R();
       draw_sprites();
     }

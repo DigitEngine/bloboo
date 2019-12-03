@@ -44,11 +44,11 @@ void draw_sprites(void)
   
   if(direction == LEFT)
   {
-    sprid = oam_meta_spr(high_byte(Bloboo.x), high_byte(Bloboo.y), sprid, PLYR_L);
+    sprid = oam_meta_spr(high_byte(Bloboo.x), high_byte(Bloboo.y), sprid, cur_spr_L);
   }
   else
   {
-    sprid = oam_meta_spr(high_byte(Bloboo.x), high_byte(Bloboo.y), sprid, PLYR_R);
+    sprid = oam_meta_spr(high_byte(Bloboo.x), high_byte(Bloboo.y), sprid, cur_spr_R);
   }
   
   // Draw enemies and stuff when ready
@@ -71,6 +71,7 @@ void movement(void)
 			Bloboo.vel_x -= ACCEL;
 			if(Bloboo.vel_x < -MAX_SPEED)Bloboo.vel_x = -MAX_SPEED;
 		}
+          	plyr_walk();
 	}
 	else if (pad & DPD_R){
 		
@@ -78,11 +79,14 @@ void movement(void)
 
 		Bloboo.vel_x += ACCEL;
 		if(Bloboo.vel_x > MAX_SPEED)Bloboo.vel_x = MAX_SPEED;
-	}
+		plyr_walk();
+        }
 	else { // nothing pressed
 		if(Bloboo.vel_x >= 0x100)Bloboo.vel_x -= ACCEL;
 		else if(Bloboo.vel_x < -0x100)Bloboo.vel_x += ACCEL;
 		else Bloboo.vel_x = 0;
+          	cur_spr_L = BLB_L;
+          	cur_spr_R = BLB_R;
 	}
 	
 	Bloboo.x += Bloboo.vel_x;

@@ -1,6 +1,6 @@
 
 #define BLBOO_R(name,hex,attr)\
-const unsigned char name[]=\
+const unsigned char name []=\
 {\
 0,  0,(hex)+0,attr,\
 8,  0,(hex)+1,attr,\
@@ -77,8 +77,7 @@ const unsigned char name[] = \
 0,  8,0xff,0,\
 8,  8,0xff,0,\
 128};
-
-
+static unsigned char wlk_wait = 35;
 /* METASPRITE DEFINITIONS */
 
 /// Neutral sprites
@@ -89,11 +88,43 @@ MSPR_3x3_BLANK(_3x3_BLINK);
 /// Right-facing sprites
 
 // Player sprites
-BLBOO_R(PLYR_R, 0x00, 0);
-BLBOO_R(PLYR_WALK_R, 0x08, 0);
+BLBOO_R(BLB_R, 0x00, 0);		// Bloboo
+BLBOO_R(BLB_WLK_R, 0x08, 0);
+BLBOO_HURT_R(BLB_HRT_R, 0x00, 0);
 
+BLBOO_R(KKE_R, 0x16, 0);		// Kookie
+BLBOO_R(KKE_WLK_R, 0x1e, 0);
+BLBOO_HURT_R(KKE_HRT_R, 0x16, 0);
 
 /// Left-facing sprites
 
 // Player sprites
-BLBOO_L(PLYR_L, 0x00, 0);
+BLBOO_L(BLB_L, 0x00, 0);		// Bloboo
+BLBOO_L(BLB_WLK_L, 0x08, 0);
+BLBOO_HURT_L(BLB_HRT_L, 0x00, 0);
+
+BLBOO_L(KKE_L, 0x16, 0);		// Kookie
+BLBOO_L(KKE_WLK_L, 0x1e, 0);
+BLBOO_HURT_L(KKE_HRT_L, 0x16, 0);
+
+unsigned char const* cur_spr_L = BLB_WLK_L;
+unsigned char const* cur_spr_R = BLB_R;
+
+void plyr_walk()
+{
+  if(wlk_wait)
+  {
+    wlk_wait--;
+  }
+  else
+  {
+    // Update left
+    if(cur_spr_L == BLB_L)cur_spr_L = BLB_WLK_L;
+    if(cur_spr_L == BLB_WLK_L)cur_spr_L = BLB_L;
+    
+    // Update right
+    if(cur_spr_R == BLB_R)cur_spr_R = BLB_WLK_R;
+    if(cur_spr_R == BLB_WLK_R)cur_spr_R = BLB_R;
+    wlk_wait = 35;
+  }
+}
