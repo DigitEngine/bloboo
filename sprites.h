@@ -77,7 +77,7 @@ const unsigned char name[] = \
 0,  8,0xff,0,\
 8,  8,0xff,0,\
 128};
-static unsigned char wlk_wait = 10;
+static unsigned char wlk_wait = 15;
 unsigned char wlk_frame_num = 0;
 
 bool is_walking = false;
@@ -121,6 +121,10 @@ void plyr_walk()
   }
   else
   {
+    // Update frame number
+    wlk_frame_num++;
+    if(wlk_frame_num > 1)wlk_frame_num = 0;
+    
     // Update left
     if(wlk_frame_num == 0)cur_spr_L = BLB_L;
     if(wlk_frame_num == 1)cur_spr_L = BLB_WLK_L;
@@ -129,9 +133,7 @@ void plyr_walk()
     if(wlk_frame_num == 0)cur_spr_R = BLB_R;
     if(wlk_frame_num == 1)cur_spr_R = BLB_WLK_R;
     
-    wlk_frame_num++;
-    if(wlk_frame_num > 1)wlk_frame_num = 0;
-    
+    // Restart animation
     wlk_wait = 15;
   }
 }
