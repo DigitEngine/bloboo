@@ -71,7 +71,7 @@ void movement(void)
 			Bloboo.vel_x -= ACCEL;
 			if(Bloboo.vel_x < -MAX_SPEED)Bloboo.vel_x = -MAX_SPEED;
 		}
-          	plyr_walk();
+          	is_walking = true;
 	}
 	else if (pad & DPD_R){
 		
@@ -79,14 +79,13 @@ void movement(void)
 
 		Bloboo.vel_x += ACCEL;
 		if(Bloboo.vel_x > MAX_SPEED)Bloboo.vel_x = MAX_SPEED;
-		plyr_walk();
+        	is_walking = true;
         }
 	else { // nothing pressed
 		if(Bloboo.vel_x >= 0x100)Bloboo.vel_x -= ACCEL;
 		else if(Bloboo.vel_x < -0x100)Bloboo.vel_x += ACCEL;
 		else Bloboo.vel_x = 0;
-          	cur_spr_L = BLB_L;
-          	cur_spr_R = BLB_R;
+        	is_walking = false;
 	}
 	
 	Bloboo.x += Bloboo.vel_x;

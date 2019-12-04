@@ -77,7 +77,10 @@ const unsigned char name[] = \
 0,  8,0xff,0,\
 8,  8,0xff,0,\
 128};
-static unsigned char wlk_wait = 35;
+static unsigned char wlk_wait = 10;
+unsigned char wlk_frame_num = 0;
+
+bool is_walking = false;
 /* METASPRITE DEFINITIONS */
 
 /// Neutral sprites
@@ -119,12 +122,16 @@ void plyr_walk()
   else
   {
     // Update left
-    if(cur_spr_L == BLB_L)cur_spr_L = BLB_WLK_L;
-    if(cur_spr_L == BLB_WLK_L)cur_spr_L = BLB_L;
+    if(wlk_frame_num == 0)cur_spr_L = BLB_L;
+    if(wlk_frame_num == 1)cur_spr_L = BLB_WLK_L;
     
     // Update right
-    if(cur_spr_R == BLB_R)cur_spr_R = BLB_WLK_R;
-    if(cur_spr_R == BLB_WLK_R)cur_spr_R = BLB_R;
-    wlk_wait = 35;
+    if(wlk_frame_num == 0)cur_spr_R = BLB_R;
+    if(wlk_frame_num == 1)cur_spr_R = BLB_WLK_R;
+    
+    wlk_frame_num++;
+    if(wlk_frame_num > 1)wlk_frame_num = 0;
+    
+    wlk_wait = 15;
   }
 }

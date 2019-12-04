@@ -423,7 +423,13 @@ void main(void)
       
       set_scroll_x(scroll_x);
       set_scroll_y(scroll_y);
-      plyr_walk();
+      if(is_walking && Bloboo.vel_y >= 0)plyr_walk();
+      if(!is_walking || Bloboo.vel_y < 0)
+      {
+        wlk_wait = 15;
+        cur_spr_L = BLB_L;
+        cur_spr_R = BLB_R;
+      }
       draw_screen_R();
       draw_sprites();
     }
