@@ -30,7 +30,7 @@ unsigned char eject_L;
 unsigned char eject_R;
 unsigned char eject_U;
 unsigned char eject_D;
-unsigned char direction;
+unsigned char direction = RIGHT;
 
 byte pad;
 byte pad_t;
@@ -132,11 +132,11 @@ const unsigned char is_solid[] =
   0
 };
 
-#define MAX_ROOMS (3-1)
+#define MAX_ROOMS (4-1)
 #define MAX_SCROLL (MAX_ROOMS*0x100)-1
 
-const unsigned char* const Cols[] = {Col1, Col2, Col3};
-const unsigned char* const Rooms[] = {Room1_1, Room1_2, Room1_3};
+const unsigned char* const Cols[] = {Col1_1, Col1_2, Col1_3, Col1_4};
+const unsigned char* const Rooms[] = {Room1_1, Room1_2, Room1_3, Room1_4};
 
 // PROTOTYPES
 void load_room(void);

@@ -1,3 +1,5 @@
+#define BSP 0x2d
+
 
 #define BLBOO_R(name,hex,attr)\
 const unsigned char name []=\
@@ -54,6 +56,12 @@ const unsigned char name[]=\
 8, 16,(hex)+20,attr|OAM_FLIP_H,\
 16,16,(hex)+19,attr|OAM_FLIP_H,\
 128};
+
+#define BLBOO_SHOOT_R(name,hex,attr)\
+const unsigned char name[]=\
+{\
+0,  0,(hex)+0 ,attr,
+
 
 
 #define MSPR_3x3_BLANK(name)\
