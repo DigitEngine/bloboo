@@ -165,7 +165,6 @@ void __fastcall__ famitone_update(void);
 //#link "sfx.s"
 //#link "music.s"
 
-
 const char PALETTE_0[] =
 {
   0x0f,
@@ -218,8 +217,8 @@ const char PLPAL_5[] = { 0x0f,0x0a,0x1a,0x2a, 0x0 };
 static unsigned char wait = 160;
 static unsigned char frame_cnt = 0;
 
-#pragma bss-name(push, "ZEROPAGE")
 #pragma data-name(push, "ZEROPAGE")
+#pragma bss-name(push, "ZEROPAGE")
 
 void fade_in()
 {
@@ -410,6 +409,7 @@ void main(void)
     if(state == GAME && level == LEVEL_1)
     {
       ppu_wait_nmi();
+      split(scroll_x, scroll_y);
       
       pad_t = pad_trigger(0);
       pad = pad_state(0);
@@ -421,8 +421,6 @@ void main(void)
       //sprite_collisions();
       //enemy_moves();
       
-      set_scroll_x(scroll_x);
-      set_scroll_y(scroll_y);
       if(is_walking && collision_D)plyr_walk();
       else
       {

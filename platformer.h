@@ -152,3 +152,4 @@ char get_position(void);
 void sprite_collisions(void);
 void check_spr_objects(void);
 //void sprite_obj_init(void);
+void set_sprite_zero(void);
