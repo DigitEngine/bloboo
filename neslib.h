@@ -287,9 +287,9 @@ void __fastcall__ nmi_set_callback(void (*callback)(void));
 #define MASK_BG			0x08
 #define MASK_EDGE_SPR		0x04
 #define MASK_EDGE_BG		0x02
-#define MASK_TINT_RED		0x40
-#define MASK_TINT_BLUE		0x80
-#define MASK_TINT_GREEN		0x20
+#define MASK_TINT_RED		0x20
+#define MASK_TINT_BLUE		0x40
+#define MASK_TINT_GREEN		0x80
 #define MASK_MONO		0x01
 
 #define NAMETABLE_A		0x2000
@@ -335,3 +335,5 @@ extern byte oam_off;
 
 #endif /* neslib.h */
 
+
+//#link "neslib.s"

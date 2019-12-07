@@ -42,7 +42,7 @@ void draw_sprites(void)
   
   sprid = 0;
   
-  oam_spr(1, 24, 0xff, 0, sprid);
+  set_sprite_zero();
   if(direction == LEFT)
   {
     sprid = oam_meta_spr(high_byte(Bloboo.x), high_byte(Bloboo.y), sprid, cur_spr_L);
@@ -411,7 +411,5 @@ char get_position(void)
 
 void set_sprite_zero(void)
 {
-  oam_set(0);
-  
   oam_spr(1, 24, 0xff, 0, 3);
 }

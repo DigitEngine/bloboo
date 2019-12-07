@@ -10,6 +10,7 @@ Platform: NES
 */
 #include "neslib.h"			// Main library
 
+
 #include <string.h>			// Stuff with memory
 
 // SCREEN NAMETABLES
@@ -164,6 +165,8 @@ PEOPLE: None
 void __fastcall__ famitone_update(void);
 //#link "sfx.s"
 //#link "music.s"
+
+//#link "neslib.s"
 
 const char PALETTE_0[] =
 {
@@ -371,6 +374,8 @@ void main(void)
   
   music_play(0);
   
+  set_sprite_zero();
+  
   /* GAME LOOP */
   while(1)
   {
@@ -409,7 +414,7 @@ void main(void)
     if(state == GAME && level == LEVEL_1)
     {
       ppu_wait_nmi();
-      split(scroll_x, scroll_y);
+      split(scroll_x, 0);
       
       pad_t = pad_trigger(0);
       pad = pad_state(0);
@@ -420,6 +425,8 @@ void main(void)
       //check_spr_objects();
       //sprite_collisions();
       //enemy_moves();
+      set_scroll_x(0);
+      set_scroll_y(scroll_y);
       
       if(is_walking && collision_D)plyr_walk();
       else
