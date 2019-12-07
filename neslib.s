@@ -6,9 +6,8 @@
 ;nesdoug version, 2019-09
 ;minor change %%, added ldx #0 to functions returning char
 ;removed sprid from c functions to speed them up
-.include "famitone2.s"
-
-
+.define FT_SFX_ENABLE   1
+.define FT_DPCM_ENABLE  0
 
 	.export _pal_all,_pal_bg,_pal_spr,_pal_col,_pal_clear
 	.export _pal_bright,_pal_spr_bright,_pal_bg_bright
@@ -875,8 +874,8 @@ _pad_poll:
 	dex
 	bne @padPollPort
 
-	lda <PAD_BUF
-	cmp <PAD_BUF+1
+	lda #<PAD_BUF
+	cmp #<PAD_BUF+1
 	beq @done
 	cmp <PAD_BUF+2
 	beq @done
@@ -928,7 +927,7 @@ _pad_state:
 
 rand1:
 
-	lda <RAND_SEED
+	lda #<RAND_SEED
 	asl a
 	bcc @1
 	eor #$cf
@@ -954,7 +953,7 @@ _rand8:
 
 	jsr rand1
 	jsr rand2
-	adc <RAND_SEED
+	adc #<RAND_SEED
 	ldx #0
 	rts
 
@@ -1024,7 +1023,7 @@ _flush_vram_update_nmi: ;minor changes %
 @updNotSeq:
 
 	tax
-	lda <PPU_CTRL_VAR
+	lda #<PPU_CTRL_VAR
 	cpx #$80				;is it a horizontal or vertical sequence?
 	bcc @updHorzSeq
 	cpx #$ff				;is it end of the update?
@@ -1061,7 +1060,7 @@ _flush_vram_update_nmi: ;minor changes %
 	dex
 	bne @updNameLoop
 
-	lda <PPU_CTRL_VAR
+	lda #<PPU_CTRL_VAR
 	sta PPU_CTRL
 
 	jmp @updName
@@ -1114,7 +1113,7 @@ _vram_fill:
 
 @2:
 
-	ldx <LEN
+	ldx #<LEN
 	beq @4
 
 @3:
