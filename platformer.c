@@ -36,26 +36,34 @@ void load_room(void)
   memcpy(c_map, Cols[0], 240);
 }
 
-void draw_sprites(void)
+void draw_sprites(bool is_paused)
 {
   oam_clear();
   
   sprid = 0;
   
-  set_sprite_zero();
-  if(direction == LEFT)
+  if(!is_paused)
   {
-    sprid = oam_meta_spr(high_byte(Bloboo.x), high_byte(Bloboo.y), sprid, cur_spr_L);
+    bank_spr(1);
+    if(direction == LEFT)
+    {
+      sprid = oam_meta_spr(high_byte(Bloboo.x), high_byte(Bloboo.y), sprid, cur_spr_L);
+    }
+    else
+    {
+      sprid = oam_meta_spr(high_byte(Bloboo.x), high_byte(Bloboo.y), sprid, cur_spr_R);
+    }
   }
   else
   {
-    sprid = oam_meta_spr(high_byte(Bloboo.x), high_byte(Bloboo.y), sprid, cur_spr_R);
+    bank_spr(0);
+    sprid = oam_meta_spr(((32*8)/2-(6*8)/2), (((30*8)-8)/2), sprid, paused_text);
   }
   
   // Draw enemies and stuff when ready
 }
 
-void movement(void)
+void input(void)
 {
   old_x = Bloboo.x;
 	
@@ -407,9 +415,3 @@ char get_position(void)
 }
 
 //void spr_obj_init(void);
-
-
-void set_sprite_zero(void)
-{
-  oam_spr(1, 24, 0xff, 0, 3);
-}

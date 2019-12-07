@@ -1,4 +1,3 @@
-
 ;NES hardware-dependent functions by Shiru (shiru@mail.ru)
 ;with improvements by VEG
 ;Feel free to do anything you want with this code, consider it Public Domain
@@ -6,13 +5,14 @@
 ;nesdoug version, 2019-09
 ;minor change %%, added ldx #0 to functions returning char
 ;removed sprid from c functions to speed them up
-.define FT_SFX_ENABLE   1
-.define FT_DPCM_ENABLE  0
+
+
+
 
 	.export _pal_all,_pal_bg,_pal_spr,_pal_col,_pal_clear
 	.export _pal_bright,_pal_spr_bright,_pal_bg_bright
 	.export _ppu_off,_ppu_on_all,_ppu_on_bg,_ppu_on_spr,_ppu_mask,_ppu_system
-	.export _oam_clear,_oam_size,_oam_spr,_oam_meta_spr,_oam_hide_rest
+	.export _oam_clear,_oam_size,_oam_spr,_oam_meta_spr,_oam_hide_rest,_oam_set,_oam_get
 	.export _ppu_wait_frame,_ppu_wait_nmi
 	.export _scroll,_split
 	.export _bank_spr,_bank_bg
@@ -25,7 +25,7 @@
 	.export _set_vram_update,_flush_vram_update
 	.export _memcpy,_memfill,_delay
 	
-	.export _flush_vram_update_nmi, _oam_set, _oam_get
+	.export _flush_vram_update_nmi
 
 
 
@@ -38,7 +38,7 @@ nmi:
 	tya
 	pha
 
-	lda #<PPU_MASK_VAR	;if rendering is disabled, do not access the VRAM at all
+	lda <PPU_MASK_VAR	;if rendering is disabled, do not access the VRAM at all
 	and #%00011000
 	bne @doUpdate
 	jmp	@skipAll
@@ -48,7 +48,7 @@ nmi:
 	lda #>OAM_BUF		;update OAM
 	sta PPU_OAM_DMA
 
-	lda #<PAL_UPDATE		;update palette if needed
+	lda <PAL_UPDATE		;update palette if needed
 	bne @updPal
 	jmp @updVRAM
 
@@ -92,12 +92,12 @@ nmi:
 
 @updVRAM:
 
-	lda #<VRAM_UPDATE
+	lda <VRAM_UPDATE
 	beq @skipUpd
 	lda #0
 	sta <VRAM_UPDATE
 	
-	lda #<NAME_UPD_ENABLE
+	lda <NAME_UPD_ENABLE
 	beq @skipUpd
 
 	jsr _flush_vram_update_nmi
@@ -108,22 +108,22 @@ nmi:
 	sta PPU_ADDR
 	sta PPU_ADDR
 
-	lda #<SCROLL_X
+	lda <SCROLL_X
 	sta PPU_SCROLL
-	lda #<SCROLL_Y
+	lda <SCROLL_Y
 	sta PPU_SCROLL
 
-	lda #<PPU_CTRL_VAR
+	lda <PPU_CTRL_VAR
 	sta PPU_CTRL
 
 @skipAll:
 
-	lda #<PPU_MASK_VAR
+	lda <PPU_MASK_VAR
 	sta PPU_MASK
 
 	inc <FRAME_CNT1
 	inc <FRAME_CNT2
-	lda #<FRAME_CNT2
+	lda <FRAME_CNT2
 	cmp #6
 	bne @skipNtsc
 	lda #0
@@ -207,7 +207,7 @@ _pal_col:
 	jsr popa
 	and #$1f
 	tax
-	lda #<PTR
+	lda <PTR
 	sta PAL_BUF,x
 	inc <PAL_UPDATE
 	rts
@@ -274,7 +274,7 @@ _pal_bright:
 
 _ppu_off:
 
-	lda #<PPU_MASK_VAR
+	lda <PPU_MASK_VAR
 	and #%11100111
 	sta <PPU_MASK_VAR
 	jmp _ppu_wait_nmi
@@ -285,7 +285,7 @@ _ppu_off:
 
 _ppu_on_all:
 
-	lda #<PPU_MASK_VAR
+	lda <PPU_MASK_VAR
 	ora #%00011000
 
 ppu_onoff:
@@ -299,7 +299,7 @@ ppu_onoff:
 
 _ppu_on_bg:
 
-	lda #<PPU_MASK_VAR
+	lda <PPU_MASK_VAR
 	ora #%00001000
 	bne ppu_onoff	;bra
 
@@ -309,7 +309,7 @@ _ppu_on_bg:
 
 _ppu_on_spr:
 
-	lda #<PPU_MASK_VAR
+	lda <PPU_MASK_VAR
 	ora #%00010000
 	bne ppu_onoff	;bra
 
@@ -328,7 +328,7 @@ _ppu_mask:
 
 _ppu_system:
 
-	lda #<NTSC_MODE
+	lda <NTSC_MODE
 	ldx #0
 	rts
 
@@ -383,9 +383,9 @@ _oam_size:
 	asl a
 	and #$20
 	sta <TEMP
-	lda #<PPU_CTRL_VAR
+	lda <PPU_CTRL_VAR
 	and #$df
-	ora #<TEMP
+	ora <TEMP
 	sta <PPU_CTRL_VAR
 
 	rts
@@ -411,7 +411,7 @@ _oam_spr:
 	lda (sp),y
 	sta OAM_BUF+3,x
 
-	lda #<sp
+	lda <sp
 	clc
 	adc #3 ;4
 	sta <sp
@@ -452,12 +452,12 @@ _oam_meta_spr:
 	beq @2
 	iny
 	clc
-	adc #<SCRX
+	adc <SCRX
 	sta OAM_BUF+3,x
 	lda (PTR),y		;y offset
 	iny
 	clc
-	adc #<SCRY
+	adc <SCRY
 	sta OAM_BUF+0,x
 	lda (PTR),y		;tile
 	iny
@@ -473,7 +473,7 @@ _oam_meta_spr:
 
 @2:
 
-	lda #<sp
+	lda <sp
 	adc #1 ;2			;carry is always set here, so it adds 3
 	sta <sp
 	bcc @3
@@ -514,18 +514,18 @@ _ppu_wait_frame:
 
 	lda #1
 	sta <VRAM_UPDATE
-	lda #<FRAME_CNT1
+	lda <FRAME_CNT1
 
 @1:
 
-	cmp #<FRAME_CNT1
+	cmp <FRAME_CNT1
 	beq @1
-	lda #<NTSC_MODE
+	lda <NTSC_MODE
 	beq @3
 
 @2:
 
-	lda #<FRAME_CNT2
+	lda <FRAME_CNT2
 	cmp #5
 	beq @2
 
@@ -541,10 +541,10 @@ _ppu_wait_nmi:
 
 	lda #1
 	sta <VRAM_UPDATE
-	lda #<FRAME_CNT1
+	lda <FRAME_CNT1
 @1:
 
-	cmp #<FRAME_CNT1
+	cmp <FRAME_CNT1
 	beq @1
 	rts
 
@@ -574,7 +574,7 @@ _vram_unrle:
 
 @11:
 
-	cmp #<RLE_TAG
+	cmp <RLE_TAG
 	beq @2
 	sta PPU_DATA
 	sta <RLE_BYTE
@@ -591,7 +591,7 @@ _vram_unrle:
 @21:
 
 	tax
-	lda #<RLE_BYTE
+	lda <RLE_BYTE
 
 @3:
 
@@ -614,7 +614,7 @@ _scroll:
 
 	txa
 	bne @1
-	lda #<TEMP
+	lda <TEMP
 	cmp #240
 	bcs @1
 	sta <SCROLL_Y
@@ -625,7 +625,7 @@ _scroll:
 @1:
 
 	sec
-	lda #<TEMP
+	lda <TEMP
 	sbc #240
 	sta <SCROLL_Y
 	lda #2
@@ -637,11 +637,11 @@ _scroll:
 	sta <SCROLL_X
 	txa
 	and #$01
-	ora #<TEMP
+	ora <TEMP
 	sta <TEMP
-	lda #<PPU_CTRL_VAR
+	lda <PPU_CTRL_VAR
 	and #$fc
-	ora #<TEMP
+	ora <TEMP
 	sta <PPU_CTRL_VAR
 	rts
 
@@ -656,9 +656,9 @@ _split:
 	txa
 	and #$01
 	sta <TEMP
-	lda #<PPU_CTRL_VAR
+	lda <PPU_CTRL_VAR
 	and #$fc
-	ora #<TEMP
+	ora <TEMP
 	sta <PPU_CTRL_VAR1
 
 @3:
@@ -671,11 +671,11 @@ _split:
 	bit PPU_STATUS
 	bvc @4
 
-	lda #<SCROLL_X1
+	lda <SCROLL_X1
 	sta PPU_SCROLL
 	lda #0
 	sta PPU_SCROLL
-	lda #<PPU_CTRL_VAR1
+	lda <PPU_CTRL_VAR1
 	sta PPU_CTRL
 
 	rts
@@ -691,9 +691,9 @@ _bank_spr:
 	asl a
 	asl a
 	sta <TEMP
-	lda #<PPU_CTRL_VAR
+	lda <PPU_CTRL_VAR
 	and #%11110111
-	ora #<TEMP
+	ora <TEMP
 	sta <PPU_CTRL_VAR
 
 	rts
@@ -710,9 +710,9 @@ _bank_bg:
 	asl a
 	asl a
 	sta <TEMP
-	lda #<PPU_CTRL_VAR
+	lda <PPU_CTRL_VAR
 	and #%11101111
-	ora #<TEMP
+	ora <TEMP
 	sta <PPU_CTRL_VAR
 
 	rts
@@ -744,14 +744,14 @@ _vram_read:
 
 @2:
 
-	lda #<TEMP
+	lda <TEMP
 	bne @3
 	dec <TEMP+1
 
 @3:
 
 	dec <TEMP
-	lda #<TEMP
+	lda <TEMP
 	ora <TEMP+1
 	bne @1
 
@@ -782,14 +782,14 @@ _vram_write:
 
 @2:
 
-	lda #<TEMP
+	lda <TEMP
 	bne @3
 	dec <TEMP+1
 
 @3:
 
 	dec <TEMP
-	lda #<TEMP
+	lda <TEMP
 	ora <TEMP+1
 	bne @1
 
@@ -874,8 +874,8 @@ _pad_poll:
 	dex
 	bne @padPollPort
 
-	lda #<PAD_BUF
-	cmp #<PAD_BUF+1
+	lda <PAD_BUF
+	cmp <PAD_BUF+1
 	beq @done
 	cmp <PAD_BUF+2
 	beq @done
@@ -927,7 +927,7 @@ _pad_state:
 
 rand1:
 
-	lda #<RAND_SEED
+	lda <RAND_SEED
 	asl a
 	bcc @1
 	eor #$cf
@@ -953,7 +953,7 @@ _rand8:
 
 	jsr rand1
 	jsr rand2
-	adc #<RAND_SEED
+	adc <RAND_SEED
 	ldx #0
 	rts
 
@@ -1023,7 +1023,7 @@ _flush_vram_update_nmi: ;minor changes %
 @updNotSeq:
 
 	tax
-	lda #<PPU_CTRL_VAR
+	lda <PPU_CTRL_VAR
 	cpx #$80				;is it a horizontal or vertical sequence?
 	bcc @updHorzSeq
 	cpx #$ff				;is it end of the update?
@@ -1060,7 +1060,7 @@ _flush_vram_update_nmi: ;minor changes %
 	dex
 	bne @updNameLoop
 
-	lda #<PPU_CTRL_VAR
+	lda <PPU_CTRL_VAR
 	sta PPU_CTRL
 
 	jmp @updName
@@ -1113,7 +1113,7 @@ _vram_fill:
 
 @2:
 
-	ldx #<LEN
+	ldx <LEN
 	beq @4
 
 @3:

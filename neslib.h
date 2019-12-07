@@ -1,5 +1,4 @@
-#ifndef _NESLIB_H
-#define _NESLIB_H
+
 /*
  (C) 2015 Alex Semenov (Shiru)
  (C) 2016 Lauri Kasanen
@@ -99,7 +98,6 @@ unsigned char __fastcall__ nesclock(void);
 unsigned char __fastcall__ get_ppu_ctrl_var(void);
 void __fastcall__ set_ppu_ctrl_var(unsigned char var);
 
-
 // clear OAM buffer, all the sprites are hidden
 void __fastcall__ oam_clear(void);
 
@@ -122,7 +120,6 @@ unsigned char __fastcall__ oam_meta_spr(unsigned char x, unsigned char y,
 
 // hide all remaining sprites from given offset
 void __fastcall__ oam_hide_rest(unsigned char sprid);
-
 
 // initialize the FamiTone system
 void __fastcall__ famitone_init(void* music_data);
@@ -170,7 +167,7 @@ void __fastcall__ scroll(unsigned int x, unsigned int y);
 // warning: the program loop has to fit into the frame time, ppu_wait_frame should not be used
 //          otherwise empty frames without split will be inserted, resulting in jumpy screen
 // warning: only X scroll could be changed in this version
-void __fastcall__ split(unsigned int x, unsigned int y);
+void __fastcall__ split(unsigned int x);
 
 // set scroll after screen split invoked by the sprite 0 hit
 // sets both X and Y, but timing might be iffy depending
@@ -332,8 +329,3 @@ typedef struct OAMSprite {
 
 extern byte oam_off;
 #pragma zpsym ("oam_off")
-
-#endif /* neslib.h */
-
-
-//#link "neslib.s"

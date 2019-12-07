@@ -140,8 +140,8 @@ const unsigned char* const Rooms[] = {Room1_1, Room1_2, Room1_3, Room1_4};
 
 // PROTOTYPES
 void load_room(void);
-void draw_sprites(void);
-void movement(void);
+void draw_sprites(bool is_paused);
+void input(void);
 void bg_collision(void);
 void draw_screen_R(void);
 void new_cmap(void);
@@ -152,4 +152,3 @@ char get_position(void);
 void sprite_collisions(void);
 void check_spr_objects(void);
 //void sprite_obj_init(void);
-void set_sprite_zero(void);

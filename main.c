@@ -10,7 +10,6 @@ Platform: NES
 */
 #include "neslib.h"			// Main library
 
-
 #include <string.h>			// Stuff with memory
 
 // SCREEN NAMETABLES
@@ -162,11 +161,9 @@ PEOPLE: None
 /// Link audio stuff
 
 //#link "famitone2.s"
-void __fastcall__ famitone_update(void);
 //#link "sfx.s"
 //#link "music.s"
 
-//#link "neslib.s"
 
 const char PALETTE_0[] =
 {
@@ -325,21 +322,12 @@ void main(void)
   bool bf = false;
   bool sp = true;
   
-  byte p_clock = 0;
-  byte p_mult = 0;
-  
-  int plyr_x = 8;
-  int plyr_y = 151-8;
-  
-  int sx = 0;
-  
-  byte plr = PLAYER_RIGHT;
-  byte pls = PLAYER_NORMAL;
-  
   byte key = 0;
   
   int arr_x = 80;
   int arr_y = 120;
+  
+  bool paused = false;
   
   famitone_init(bloboo_music_data);
   sfx_init(sound_data);
@@ -373,8 +361,6 @@ void main(void)
   fade_in();			// Fade in
   
   music_play(0);
-  
-  set_sprite_zero();
   
   /* GAME LOOP */
   while(1)
@@ -414,29 +400,40 @@ void main(void)
     if(state == GAME && level == LEVEL_1)
     {
       ppu_wait_nmi();
-      split(scroll_x, 0);
-      
-      pad_t = pad_trigger(0);
-      pad = pad_state(0);
-      
-      clear_vram_buffer();
-      
-      movement();
-      //check_spr_objects();
-      //sprite_collisions();
-      //enemy_moves();
-      set_scroll_x(0);
-      set_scroll_y(scroll_y);
-      
-      if(is_walking && collision_D)plyr_walk();
+      if(!paused)
+      {
+        color_emphasis(COL_EMP_NORMAL);
+        
+        pad_t = pad_trigger(0);
+        pad = pad_state(0);
+        
+        clear_vram_buffer();
+        
+        input();
+        //check_spr_objects();
+        //sprite_collisions();
+        //enemy_moves();
+        
+        set_scroll_x(scroll_x);
+        set_scroll_y(scroll_y);
+        
+        if(is_walking && collision_D)plyr_walk();
+        else
+        {
+          wlk_wait = 15;
+          cur_spr_L = BLB_L;
+          cur_spr_R = BLB_R;
+        }
+        draw_screen_R();
+        draw_sprites(paused);
+      }
       else
       {
-        wlk_wait = 15;
-        cur_spr_L = BLB_L;
-        cur_spr_R = BLB_R;
+        color_emphasis(COL_EMP_DARK);
+        draw_sprites(paused);
       }
-      draw_screen_R();
-      draw_sprites();
+      if(pad_t & BTN_ST)paused = !paused;
+      if(pad & BTN_ST)paused = paused;
     }
     if(state == LVLSELECT)
     {

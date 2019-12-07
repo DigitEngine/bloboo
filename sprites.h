@@ -85,6 +85,15 @@ const unsigned char name[] = \
 0,  8,0xff,0,\
 8,  8,0xff,0,\
 128};
+const unsigned char paused_text[] =
+{
+0, 0,0x1a,0,
+8, 0,0x0b,0,
+16,0,0x1f,0,
+24,0,0x1d,0,
+32,0,0x0f,0,
+40,0,0x0e,0,
+128};
 static unsigned char wlk_wait = 15;
 unsigned char wlk_frame_num = 0;
 
