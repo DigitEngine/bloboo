@@ -4,7 +4,7 @@
 #define GRAVITY 0x4b
 #define MAX_SPEED 0x180
 #define JUMP_VEL -0x600
-#define MAX_RIGHT 0x7b00
+#define MAX_RIGHT 0x7900
 
 
 
@@ -97,7 +97,7 @@ struct Hero Bloboo = { 0x9ff, 0x9000 };
 
 const unsigned char metatiles_lvl1[] =
 {
-  0x00, 0x00, 0x00, 0x00, 0,
+  0x00, 0x00, 0x00, 0x00, 0,		
   0x51, 0x51, 0x61, 0x61, 0,
   0x52, 0x52, 0x62, 0x62, 0,
   0x53, 0x53, 0x63, 0x63, 0,
@@ -110,7 +110,8 @@ const unsigned char metatiles_lvl1[] =
   0x36, 0x37, 0x46, 0x47, 1,
   0x36, 0x56, 0x46, 0x58, 1,
   0x36, 0x56, 0x36, 0x56, 1,
-  0x38, 0x39, 0x38, 0x39, 1
+  0x38, 0x39, 0x38, 0x39, 1,
+  0x30, 0x31, 0x40, 0x41, 1
 };
 
 #define COL_DOWN 0x80
@@ -132,11 +133,11 @@ const unsigned char is_solid[] =
   0
 };
 
-#define MAX_ROOMS (4-1)
+#define MAX_ROOMS (5-1)
 #define MAX_SCROLL (MAX_ROOMS*0x100)-1
 
-const unsigned char* const Cols[] = {Col1_1, Col1_2, Col1_3, Col1_4};
-const unsigned char* const Rooms[] = {Room1_1, Room1_2, Room1_3, Room1_4};
+const unsigned char* const Cols[] = {Col1_1, Col1_2, Col1_3, Col1_4, Col1_5};
+const unsigned char* const Rooms[] = {Room1_1, Room1_2, Room1_3, Room1_4, Room1_5};
 
 // PROTOTYPES
 void load_room(void);

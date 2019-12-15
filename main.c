@@ -25,7 +25,6 @@ Platform: NES
 #include "collisions.c"			// Collisions
 #include "rooms.c"			// Rooms (Graphical)
 
-
 #define NES_MIRRORING 1
 
 #define TITLE     0x00	// Hex for title screen state
@@ -54,8 +53,7 @@ the "level" variable. Do not use them for the
 "state" variable, because numbers higher than
 0x04 assigned to that variable will ultimately
 result in the game not knowing what to do and
-will most likely display garbage tiles or not
-display anything.
+will most likely display garbage tiles.
 
 Level 1 Forest
 BOSS: Cursed Lil' Orange
@@ -425,12 +423,12 @@ void main(void)
           cur_spr_R = BLB_R;
         }
         draw_screen_R();
-        draw_sprites(paused);
+        draw_sprites(false);
       }
       else
       {
         color_emphasis(COL_EMP_DARK);
-        draw_sprites(paused);
+        draw_sprites(true);
       }
       if(pad_t & BTN_ST)paused = !paused;
       if(pad & BTN_ST)paused = paused;
